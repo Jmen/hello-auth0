@@ -1,26 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import AuthContext from "../auth/AuthContext";
 
-const Nav = (props) => {
-
-    const { auth } = props;
-
-    console.log(props);
-
+const Nav = () => {
     return (
-        <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/profile">Profile</Link></li>
-            <li><Link to="/public">Public</Link></li>
-            <li><Link to="/private">Private</Link></li>
-            <li><Link to="/courses">Courses</Link></li>
-            {
-                (auth.isLoggedIn()) ?
-                    <li><button onClick={auth.logout}>logout</button></li> :
-                    <li><button onClick={auth.login}>login</button></li>
+        <AuthContext.Consumer>
+            { auth => (
+                <ul>
+                    <li><Link to="/">Home</Link></li>
+                    <li><Link to="/profile">Profile</Link></li>
+                    <li><Link to="/public">Public</Link></li>
+                    <li><Link to="/private">Private</Link></li>
+                    <li><Link to="/courses">Courses</Link></li>
+                    {
+                        (auth.isLoggedIn()) ?
+                            <li><button onClick={auth.logout}>logout</button></li> :
+                            <li><button onClick={auth.login}>login</button></li>
 
-            }
-        </ul>
+                    }
+                </ul>
+            )}
+        </AuthContext.Consumer>
     );
 };
 

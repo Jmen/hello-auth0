@@ -1,30 +1,34 @@
 import React from 'react';
 import { Route } from "react-router-dom";
 import PropTypes from 'prop-types'
+import AuthContext from '../auth/AuthContext';
 
-const PrivateRoute = ({component: Component, auth, scopes, ...rest}) => {
+function PrivateRoute ({component: Component, scopes, ...rest}) {
     return (
-        <Route {...rest}
+        <AuthContext.Consumer>
+            { auth => (
+                <Route {...rest}
+                   render={ props => {
 
-            render={  (props) => {
+                       if (!auth.isLoggedIn()) {
+                           return auth.login();
+                       }
 
-                if (!auth.isLoggedIn()) {
-                    return auth.login();
-                }
+                       if (scopes.length > 0 && !auth.userHasAllScopes(scopes)) {
+                           return <h1> You don't have the needed scopes {scopes.join(",") } </h1>
+                       }
 
-                if (scopes.length > 0 && !auth.userHasAllScopes(scopes)) {
-                    return <h1> You don't have the needed scopes {scopes.join(",") } </h1>
-                }
+                       return <Component auth={auth} {...props} />
+                   }}
+                />
 
-                return <Component auth={auth} {...props} />
-            }}
-        />
+            )}
+        </AuthContext.Consumer>
     );
 };
 
 PrivateRoute.propTypes = {
     component: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
     scopes: PropTypes.array
 };
 
