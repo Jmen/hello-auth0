@@ -10,6 +10,7 @@ export default class Auth {
             domain: process.env.REACT_APP_AUTH0_DOMAIN,
             clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
             redirect_uri: process.env.REACT_APP_AUTH0_REDIRECT_URI,
+            audience: process.env.REACT_APP_AUTH0_AUDIENCE,
             // token = access token - OAuth 2.0
             // id_token = identity token - OpenID connect
             responseType: "token id_token",
