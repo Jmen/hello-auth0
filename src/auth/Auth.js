@@ -19,7 +19,9 @@ export default class Auth {
     }
 
     login = () => {
-      this.auth0.authorize(); // redirects to auth0 login page
+        localStorage.setItem('preLoginPage', JSON.stringify(this.history.location));
+
+        this.auth0.authorize(); // redirects to auth0 login page
     };
 
     handleAuthentication = () => {
@@ -30,7 +32,9 @@ export default class Auth {
                 alert(`error ${error}`)
             }
 
-            this.history.push('/');
+            const preLoginPage = JSON.parse(localStorage.getItem('preLoginPage'));
+
+            this.history.push(preLoginPage);
         });
     };
 
