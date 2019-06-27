@@ -5,6 +5,7 @@ import Profile from "./components/Profile";
 import Nav from "./components/Nav";
 import Auth from "./auth/Auth";
 import Callback from "./components/Callback";
+import Public from "./components/Public";
 
 class App extends React.Component {
     constructor(props) {
@@ -26,6 +27,8 @@ class App extends React.Component {
                         <Profile auth={this.auth} {...props} /> :
                         <Redirect to='/'/>
                 }/>
+
+                <Route path='/public' component={Public} />
             </>
         )
     };
