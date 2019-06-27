@@ -4,7 +4,7 @@ export default class Auth {
     constructor(history) {
         this.history = history;
 
-        console.log(process.env);
+        this.requestedScopes = "openid profile email read:courses";
 
         this.auth0 = new auth0.WebAuth({
             domain: process.env.REACT_APP_AUTH0_DOMAIN,
@@ -14,7 +14,7 @@ export default class Auth {
             // token = access token - OAuth 2.0
             // id_token = identity token - OpenID connect
             responseType: "token id_token",
-            scope: "openid profile email"
+            scope: this.requestedScopes
         });
     }
 
@@ -37,9 +37,12 @@ export default class Auth {
     setSession = (authResult) => {
         const expiresAt = JSON.stringify(authResult.expiresIn * 1000 + new Date().getTime());
 
+        const scopes = authResult.scope || this.requestedScopes || "";
+
         localStorage.setItem('access_token', authResult.accessToken);
         localStorage.setItem('id_token', authResult.idToken);
         localStorage.setItem('expiresAt', expiresAt);
+        localStorage.setItem('scopes', JSON.stringify(scopes));
     };
 
     isLoggedIn = () => {
@@ -51,6 +54,7 @@ export default class Auth {
         localStorage.removeItem('access_token');
         localStorage.removeItem('id_token');
         localStorage.removeItem('expiresAt');
+        localStorage.removeItem('scopes');
 
         this.auth0.logout({
             clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
@@ -72,5 +76,12 @@ export default class Auth {
         this.auth0.client.userInfo(this.getAccessToken(), (error, profile) => {
             callback(profile, error);
         });
-    }
-}
+    };
+
+    userHasAllScopes = (scopes) => {
+
+        const grantedScopes = (JSON.parse(localStorage.getItem('scopes'))).split(' ');
+
+        return scopes.every((scope) => { return grantedScopes.includes(scope) });
+    };
+};
