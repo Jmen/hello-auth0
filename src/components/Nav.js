@@ -12,7 +12,7 @@ const Nav = (props) => {
             <li><Link to="/">Home</Link></li>
             <li><Link to="/profile">Profile</Link></li>
             <li><Link to="/public">Public</Link></li>
-
+            <li><Link to="/private">Private</Link></li>
             {
                 (auth.isLoggedIn()) ?
                     <li><button onClick={auth.logout}>logout</button></li> :
