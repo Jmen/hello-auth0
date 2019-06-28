@@ -3,7 +3,7 @@ import { Route } from "react-router-dom";
 import PropTypes from 'prop-types'
 import AuthContext from '../auth/AuthContext';
 
-function PrivateRoute ({component: Component, scopes, ...rest}) {
+const PrivateRoute = ({component: Component, scopes, ...rest}) => {
     return (
         <AuthContext.Consumer>
             { auth => (
