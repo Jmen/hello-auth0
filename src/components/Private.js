@@ -1,33 +1,29 @@
-import React, {Component} from 'react';
+import React, { useState, useEffect } from 'react';
 
-class Private extends Component {
+const Private = ({ auth }) => {
 
-    state = {
-        message: ""
-    };
+    const [message, setMessage] = useState('');
 
-    componentDidMount() {
-        fetch("/private", { headers : { Authorization : `Bearer ${this.props.auth.getAccessToken()}` } })
+    useEffect(() => {
+        fetch("/private", { headers : { Authorization : `Bearer ${auth.getAccessToken()}` } })
             .then(response => {
                 if (response.ok) {
                     return response.json();
                 } else { throw new Error("error with request from server") }
             })
             .then(response => {
-                this.setState({ message: response.message });
+                setMessage(response.message);
             })
             .catch(error => {
-                this.setState({ message: error.message });
+                setMessage(error.message);
             });
-    }
+    });
 
-    render() {
-        return (
-            <p>
-                { this.state.message }
-            </p>
-        );
-    }
-}
+    return (
+        <p>
+            { message }
+        </p>
+    );
+};
 
 export default Private;

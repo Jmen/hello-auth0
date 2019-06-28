@@ -1,12 +1,10 @@
-import React, {Component} from 'react';
+import React, { useState, useEffect} from 'react';
 
-class Public extends Component {
+const Public = () => {
 
-    state = {
-        message: ""
-    };
+    const [message, setMessage] = useState('');
 
-    componentDidMount() {
+    useEffect(() => {
         fetch("/public")
             .then(response => {
                 if (response.ok) {
@@ -14,20 +12,18 @@ class Public extends Component {
                 } else { throw new Error("error with request from server") }
             })
             .then(response => {
-                this.setState({ message: response.message });
+                setMessage(response.message);
             })
             .catch(error => {
-                this.setState({ message: error.message });
+                setMessage(error.message);
             });
-    }
+    });
 
-    render() {
-        return (
-            <p>
-                { this.state.message }
-            </p>
-        );
-    }
-}
+    return (
+        <p>
+            { message }
+        </p>
+    );
+};
 
 export default Public;
